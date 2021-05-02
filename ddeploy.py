@@ -7,7 +7,7 @@ import yaml
 # Register command line arguments
 parser = argparse.ArgumentParser(description="Deploy docker container to remote server using docker context. A configuration file is required ports and environment variables. Command line arguments will override configuration file.")
 parser.add_argument('path', metavar='Path', type=str, \
-    help="Path to folder with dockerfile", default=".")
+    help="Path to folder with dockerfile")
 parser.add_argument('--config', metavar='config', type=str, \
     help='Path to configuration file, defaults to ./ddeploy.yml', default='./ddeploy.yml')
 parser.add_argument('-c', '--context', metavar="context", type=str, \
@@ -23,10 +23,14 @@ print(args)
 
 # Read from config file if present
 if(not os.path.isfile(args['config'])):
-    os.system('dir')
     print("Configuration file not found, deploying from cli arguments.")
 else:
     data = yaml.load(open(args['config'], 'r'), Loader=yaml.Loader)
+    # Set path if not overriden, otherwise default
+    if(args['path']==None and 'path' in data):
+        args['path'] = data['path']
+    elif(args['path']==None and 'path' not in data):
+        args['path'] = '.'
     # Set context if not overriden
     if(args['context']==None and 'context' in data):
         args['context'] = data['context']
