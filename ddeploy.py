@@ -6,7 +6,7 @@ import yaml
 
 # Register command line arguments
 parser = argparse.ArgumentParser(description="Deploy docker container to remote server using docker context. A configuration file is required ports and environment variables. Command line arguments will override configuration file.")
-parser.add_argument('path', metavar='Path', type=str, \
+parser.add_argument('path', metavar='Path', type=str, nargs='?', \
     help="Path to folder with dockerfile")
 parser.add_argument('--config', metavar='config', type=str, \
     help='Path to configuration file, defaults to ./ddeploy.yml', default='./ddeploy.yml')
@@ -64,3 +64,16 @@ print(args)
 # Build the image
 print("Building image", args['name'], "from", args['path']+"/Dockerfile")
 os.system("docker --context "+args['context']+" build -t "+args['name']+" "+args['path'])
+
+# Remove exsiting container
+print("Stopping and removing existing container")
+os.system("docker --context "+args['context']+" stop "+args['name'])
+os.system("docker --context "+args['context']+" rm "+args['name'])
+
+# Run the image
+print("Running image", args['name'], "on", args['context'])
+command = "docker --context "+args['context']+" run -d --name "+args['name']+" "+" --restart "+args['restart']
+if(args['ports']!=None):
+    command += " "+args['ports']
+command += " "+args['name']
+os.system(command)
