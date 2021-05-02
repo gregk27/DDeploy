@@ -49,6 +49,17 @@ else:
             args['ports'] += " -p "+str(list(port)[0])+":"+str(port[list(port)[0]])+" "
     else:
         args['ports'] = None
+    if('env' in data):
+        args['env'] = ""
+        print(data['env'])
+        for env in data['env']:
+            args['env'] += " -e "+str(list(env)[0])+"=\""+str(env[list(env)[0]])+"\" "
+    else:
+        args['env'] = None
+    if('env-file' in data):
+        args['env-file'] = data['env-file']
+    else:
+        args['env-file'] = None
     
 FOLDER_PATTERN = re.compile("([^/\\\\]*)$")
 
@@ -75,5 +86,9 @@ print("Running image", args['name'], "on", args['context'])
 command = "docker --context "+args['context']+" run -d --name "+args['name']+" "+" --restart "+args['restart']
 if(args['ports']!=None):
     command += " "+args['ports']
+if(args['env']!=None):
+    command += " "+args['env']
+if(args['env-file']!=None):
+    command += " --env-file "+args['env-file']
 command += " "+args['name']
 os.system(command)
