@@ -42,6 +42,13 @@ else:
         args['restart'] = data['restart']
     elif(args['restart']==None and 'restart' not in data):
         args['restart'] = 'always'
+    if('ports' in data):
+        args['ports'] = ""
+        print(data['ports'])
+        for port in data['ports']:
+            args['ports'] += " -p "+str(list(port)[0])+":"+str(port[list(port)[0]])+" "
+    else:
+        args['ports'] = None
     
 FOLDER_PATTERN = re.compile("([^/\\\\]*)$")
 
