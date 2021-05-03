@@ -58,6 +58,10 @@ else:
         args['env-file'] = data['env-file']
     else:
         args['env-file'] = None
+    if('network' in data):
+        args['network'] = data['network']
+    else:
+        args['network'] = None
     
 FOLDER_PATTERN = re.compile("([^/\\\\]*)$")
 
@@ -88,5 +92,7 @@ if(args['env']!=None):
     command += " "+args['env']
 if(args['env-file']!=None):
     command += " --env-file "+args['env-file']
+if(args['network']!=None):
+    command += " --network "+args['network']
 command += " "+args['name']
 os.system(command)
