@@ -19,7 +19,7 @@ parser.add_argument('--restart', metavar="flag", type=str, \
 
 # Parse the arguments
 args = vars(parser.parse_args())
-print(args)
+# print(args)
 
 # Read from config file if present
 if(not os.path.isfile(args['config'])):
@@ -44,14 +44,12 @@ else:
         args['restart'] = 'always'
     if('ports' in data):
         args['ports'] = ""
-        print(data['ports'])
         for port in data['ports']:
             args['ports'] += " -p "+str(list(port)[0])+":"+str(port[list(port)[0]])+" "
     else:
         args['ports'] = None
     if('env' in data):
         args['env'] = ""
-        print(data['env'])
         for env in data['env']:
             args['env'] += " -e "+str(list(env)[0])+"=\""+str(env[list(env)[0]])+"\" "
     else:
@@ -71,7 +69,7 @@ if(args['context'] == None):
     sys.exit(1)
 args['name'] = args['name'].lower().replace(" ", "-")
 
-print(args)
+# print(args)
 # Build the image
 print("Building image", args['name'], "from", args['path']+"/Dockerfile")
 os.system("docker --context "+args['context']+" build -t "+args['name']+" "+args['path'])
